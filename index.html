@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Production Units Calculator</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #74ABE2, #5563DE);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    
+    /* Container */
+    .container {
+      background: #fff;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+    }
+    
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      outline: none;
+    }
+    input[type="number"]:focus,
+    select:focus {
+      border-color: #5563DE;
+      box-shadow: 0 0 5px rgba(85, 99, 222, 0.3);
+    }
+    
+    /* Button */
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #5563DE;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4454c4;
+    }
+    
+    /* Results Box */
+    .results {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f2f2f2;
+      border-radius: 6px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.5s forwards;
+    }
+    
+    /* Animation for results */
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Hidden class */
+    .hidden {
+      display: none;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Production Units Calculator</h1>
+    <!-- Order Type -->
+    <div class="form-group">
+      <label for="orderType">Order Type</label>
+      <select id="orderType">
+        <option value="formulation">Fill to Formulation</option>
+        <option value="order">Fill to Order</option>
+        <option value="quantity">Fill to Quantity</option>
+      </select>
+    </div>
+
+    <!-- For Fill to Formulation -->
+    <div id="formulationInputs">
+      <div class="form-group">
+        <label for="oilAvailable">Total Oil Available (grams)</label>
+        <input type="number" id="oilAvailable" step="any" min="0" placeholder="e.g., 100" />
+      </div>
+      <div class="form-group">
+        <label for="targetFormulation">Target Formulation (grams per unit)</label>
+        <input type="number" id="targetFormulation" step="any" min="0" placeholder="e.g., 1 or 1.2" />
+      </div>
+    </div>
+
+    <!-- For Fill to Order -->
+    <div id="orderInputs" class="hidden">
+      <div class="form-group">
+        <label for="orderQuantity">Order Quantity (units)</label>
+        <input type="number" id="orderQuantity" step="1" min="0" placeholder="e.g., 100" />
+      </div>
+    </div>
+
+    <!-- For Fill to Quantity -->
+    <div id="quantityInputs" class="hidden">
+      <div class="form-group">
+        <label for="fillQuantity">Fill Quantity (units)</label>
+        <input type="number" id="fillQuantity" step="1" min="0" placeholder="e.g., 100" />
+      </div>
+    </div>
+
+    <!-- Units per Box -->
+    <div class="form-group">
+      <label for="unitsPerBox">Units per Box</label>
+      <input type="number" id="unitsPerBox" step="1" min="1" placeholder="e.g., 200" />
+    </div>
+
+    <!-- Leak Test Option -->
+    <div class="form-group">
+      <label for="leakTest">Leak Test?</label>
+      <select id="leakTest">
+        <option value="yes">Yes</option>
+        <option value="no" selected>No</option>
+      </select>
+    </div>
+
+    <button id="calculateBtn">Calculate</button>
+    
+    <!-- Results will be displayed here -->
+    <div id="results" class="results hidden"></div>
+  </div>
+
+  <script>
+    // Update visible inputs based on order type selection.
+    const orderTypeEl = document.getElementById('orderType');
+    const formulationInputs = document.getElementById('formulationInputs');
+    const orderInputs = document.getElementById('orderInputs');
+    const quantityInputs = document.getElementById('quantityInputs');
+    const resultsEl = document.getElementById('results');
+
+    function updateInputVisibility() {
+      const type = orderTypeEl.value;
+      formulationInputs.classList.add('hidden');
+      orderInputs.classList.add('hidden');
+      quantityInputs.classList.add('hidden');
+
+      if (type === 'formulation') {
+        formulationInputs.classList.remove('hidden');
+      } else if (type === 'order') {
+        orderInputs.classList.remove('hidden');
+      } else if (type === 'quantity') {
+        quantityInputs.classList.remove('hidden');
+      }
+    }
+    orderTypeEl.addEventListener('change', updateInputVisibility);
+    updateInputVisibility();
+
+    document.getElementById('calculateBtn').addEventListener('click', function () {
+      // Clear previous results
+      resultsEl.innerHTML = '';
+      resultsEl.classList.add('hidden');
+
+      let productionUnits = 0;
+      const type = orderTypeEl.value;
+      const unitsPerBox = Number(document.getElementById('unitsPerBox').value);
+      if (!unitsPerBox || unitsPerBox <= 0) {
+        alert("Please enter a valid number for units per box.");
+        return;
+      }
+      
+      // Calculate total production units based on the selected order type.
+      if (type === 'formulation') {
+        const oilAvailable = Number(document.getElementById('oilAvailable').value);
+        const targetFormulation = Number(document.getElementById('targetFormulation').value);
+        if (oilAvailable <= 0 || targetFormulation <= 0) {
+          alert("Please enter valid positive numbers for oil available and target formulation.");
+          return;
+        }
+        productionUnits = Math.floor(oilAvailable / targetFormulation);
+      } else if (type === 'order') {
+        productionUnits = Number(document.getElementById('orderQuantity').value);
+        if (!productionUnits || productionUnits <= 0) {
+          alert("Please enter a valid order quantity.");
+          return;
+        }
+      } else if (type === 'quantity') {
+        productionUnits = Number(document.getElementById('fillQuantity').value);
+        if (!productionUnits || productionUnits <= 0) {
+          alert("Please enter a valid fill quantity.");
+          return;
+        }
+      }
+      
+      // Reserve 3 units as retains (not used for leak test or boxing)
+      const retains = 3;
+      if (productionUnits <= retains) {
+        alert("Total production units must be greater than the 3 retains.");
+        return;
+      }
+      // Effective production for calculations.
+      const effectiveProduction = productionUnits - retains;
+      
+      const leakTestOption = document.getElementById('leakTest').value;
+      let output = `<h2>Results</h2>`;
+      output += `<p><strong>Total Production Units:</strong> ${productionUnits}</p>`;
+      output += `<p><strong>Retained Units:</strong> ${retains}</p>`;
+      
+      if (leakTestOption === 'yes') {
+        // Calculate required leak test units (10% of total production)
+        const requiredLeakTest = Math.ceil(0.10 * productionUnits);
+        let maxBoxes = Math.floor(effectiveProduction / unitsPerBox);
+        let boxes = maxBoxes;
+        // Adjust full boxes until the remaining units (leak test units) are at least requiredLeakTest.
+        while (boxes > 0 && (effectiveProduction - boxes * unitsPerBox) < requiredLeakTest) {
+          boxes--;
+        }
+        const boxedUnits = boxes * unitsPerBox;
+        const leakTestUnits = effectiveProduction - boxedUnits;
+        const leakTestPercentage = Math.round((leakTestUnits / productionUnits) * 100);
+        
+        output += `<p><strong>Number of Full Boxes:</strong> ${boxes} (each with ${unitsPerBox} units)</p>`;
+        output += `<p><strong>Boxed Units:</strong> ${boxedUnits}</p>`;
+        output += `<p><strong>Leak Test Units:</strong> ${leakTestUnits}</p>`;
+        output += `<p><strong>Required Leak Test Units (10%):</strong> ${requiredLeakTest}</p>`;
+        output += `<p><strong>Leak Test Percentage:</strong> ${leakTestPercentage}%</p>`;
+        output += `<p><strong>Effective Production:</strong> ${effectiveProduction}</p>`;
+        
+        // Divide leak test units into 3 groups: Up, Down, and Side.
+        const base = Math.floor(leakTestUnits / 3);
+        const remainderGroup = leakTestUnits % 3;
+        let up = base + (remainderGroup > 0 ? 1 : 0);
+        let down = base + (remainderGroup > 1 ? 1 : 0);
+        let side = leakTestUnits - up - down;
+        
+        output += `<p><strong>Leak Test Breakdown:</strong></p>`;
+        output += `<ul>`;
+        output += `<li>Up: ${up} unit${up === 1 ? '' : 's'}</li>`;
+        output += `<li>Down: ${down} unit${down === 1 ? '' : 's'}</li>`;
+        output += `<li>Side: ${side} unit${side === 1 ? '' : 's'}</li>`;
+        output += `</ul>`;
+      } else {
+        // Packaging without leak test (using effective production).
+        const numberOfBoxes = Math.ceil(effectiveProduction / unitsPerBox);
+        output += `<p><strong>Number of Boxes:</strong> ${numberOfBoxes}</p>`;
+        output += `<p><strong>Units Used for Boxing:</strong> ${effectiveProduction}</p>`;
+      }
+      
+      resultsEl.innerHTML = output;
+      resultsEl.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
