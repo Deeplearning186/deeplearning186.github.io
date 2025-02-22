@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Production Units Calculator</title>
+  <title>Production Units Calculator & Chatbot</title>
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -17,27 +17,39 @@
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #74ABE2, #5563DE);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       padding: 20px;
     }
-    h1 {
+
+    h1, h2 {
       text-align: center;
-      margin-bottom: 20px;
       color: #fff;
     }
-    
-    /* Container */
-    .container {
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    /* Main container to hold both sections side by side */
+    .main {
+      display: flex;
+      flex-wrap: wrap;          /* Allows wrapping on smaller screens */
+      gap: 20px;
+      justify-content: center;  /* Centers the content horizontally */
+      max-width: 1200px;        /* Optional max width if you want to limit overall width */
+      margin: 0 auto;           /* Center the .main container in the body */
+    }
+
+    /* Calculator & Chatbot containers */
+    .container,
+    .chatbot-container {
       background: #fff;
       width: 100%;
       max-width: 600px;
       border-radius: 10px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       padding: 30px;
+      box-sizing: border-box;
     }
-    
+
     /* Form Groups */
     .form-group {
       margin-bottom: 20px;
@@ -62,7 +74,7 @@
       border-color: #5563DE;
       box-shadow: 0 0 5px rgba(85, 99, 222, 0.3);
     }
-    
+
     /* Button */
     button {
       width: 100%;
@@ -77,10 +89,10 @@
     button:hover {
       background: #4454c4;
     }
-    
+
     /* Results Box */
     .results {
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 20px;
       background: #f2f2f2;
       border-radius: 6px;
@@ -88,88 +100,126 @@
       transform: translateY(20px);
       animation: fadeIn 0.5s forwards;
     }
-    
-    /* Animation for results */
     @keyframes fadeIn {
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
-    
+
     /* Hidden class */
     .hidden {
       display: none;
     }
-    
+
+    /* Chatbase Wrapper & Overlay */
+    .chatbase-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 700px; /* Matches iframe min-height */
+    }
+    .chatbase-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      min-height: 700px;
+    }
+    .chatbase-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px; /* Increased to hide more text; adjust as needed */
+      background-color: #fff;
+      z-index: 9999;
+      pointer-events: none; /* Allows clicks to pass through */
+    }
+
     /* Responsive adjustments */
     @media (max-width: 600px) {
-      .container {
+      .container,
+      .chatbot-container {
         padding: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Production Units Calculator</h1>
-    <!-- Order Type -->
-    <div class="form-group">
-      <label for="orderType">Order Type</label>
-      <select id="orderType">
-        <option value="formulation">Fill to Formulation</option>
-        <option value="order">Fill to Order</option>
-        <option value="quantity">Fill to Quantity</option>
-      </select>
-    </div>
-
-    <!-- For Fill to Formulation -->
-    <div id="formulationInputs">
+  <div class="main">
+    <!-- Production Units Calculator -->
+    <div class="container">
+      <h1>Production Units Calculator</h1>
+      <!-- Order Type -->
       <div class="form-group">
-        <label for="oilAvailable">Total Oil Available (grams)</label>
-        <input type="number" id="oilAvailable" step="any" min="0" placeholder="e.g., 100" />
+        <label for="orderType">Order Type</label>
+        <select id="orderType">
+          <option value="formulation">Fill to Formulation</option>
+          <option value="order">Fill to Order</option>
+          <option value="quantity">Fill to Quantity</option>
+        </select>
       </div>
+
+      <!-- For Fill to Formulation -->
+      <div id="formulationInputs">
+        <div class="form-group">
+          <label for="oilAvailable">Total Oil Available (grams)</label>
+          <input type="number" id="oilAvailable" step="any" min="0" placeholder="e.g., 100" />
+        </div>
+        <div class="form-group">
+          <label for="targetFormulation">Target Formulation (grams per unit)</label>
+          <input type="number" id="targetFormulation" step="any" min="0" placeholder="e.g., 1 or 1.2" />
+        </div>
+      </div>
+
+      <!-- For Fill to Order -->
+      <div id="orderInputs" class="hidden">
+        <div class="form-group">
+          <label for="orderQuantity">Order Quantity (units)</label>
+          <input type="number" id="orderQuantity" step="1" min="0" placeholder="e.g., 100" />
+        </div>
+      </div>
+
+      <!-- For Fill to Quantity -->
+      <div id="quantityInputs" class="hidden">
+        <div class="form-group">
+          <label for="fillQuantity">Fill Quantity (units)</label>
+          <input type="number" id="fillQuantity" step="1" min="0" placeholder="e.g., 100" />
+        </div>
+      </div>
+
+      <!-- Units per Box -->
       <div class="form-group">
-        <label for="targetFormulation">Target Formulation (grams per unit)</label>
-        <input type="number" id="targetFormulation" step="any" min="0" placeholder="e.g., 1 or 1.2" />
+        <label for="unitsPerBox">Units per Box</label>
+        <input type="number" id="unitsPerBox" step="1" min="1" placeholder="e.g., 200" />
       </div>
-    </div>
 
-    <!-- For Fill to Order -->
-    <div id="orderInputs" class="hidden">
+      <!-- Leak Test Option -->
       <div class="form-group">
-        <label for="orderQuantity">Order Quantity (units)</label>
-        <input type="number" id="orderQuantity" step="1" min="0" placeholder="e.g., 100" />
+        <label for="leakTest">Leak Test?</label>
+        <select id="leakTest">
+          <option value="yes">Yes</option>
+          <option value="no" selected>No</option>
+        </select>
+      </div>
+
+      <button id="calculateBtn">Calculate</button>
+      
+      <!-- Results will be displayed here -->
+      <div id="results" class="results hidden"></div>
+    </div>
+
+    <!-- Chatbot Section -->
+    <div class="chatbot-container">
+      <h2>Chat with Us</h2>
+      <div class="chatbase-wrapper">
+        <iframe
+          src="https://www.chatbase.co/chatbot-iframe/jmSKrUVVfzTOON-zilLH1"
+          frameborder="0">
+        </iframe>
+        <!-- Overlay to mask the bottom portion -->
+        <div class="chatbase-overlay"></div>
       </div>
     </div>
-
-    <!-- For Fill to Quantity -->
-    <div id="quantityInputs" class="hidden">
-      <div class="form-group">
-        <label for="fillQuantity">Fill Quantity (units)</label>
-        <input type="number" id="fillQuantity" step="1" min="0" placeholder="e.g., 100" />
-      </div>
-    </div>
-
-    <!-- Units per Box -->
-    <div class="form-group">
-      <label for="unitsPerBox">Units per Box</label>
-      <input type="number" id="unitsPerBox" step="1" min="1" placeholder="e.g., 200" />
-    </div>
-
-    <!-- Leak Test Option -->
-    <div class="form-group">
-      <label for="leakTest">Leak Test?</label>
-      <select id="leakTest">
-        <option value="yes">Yes</option>
-        <option value="no" selected>No</option>
-      </select>
-    </div>
-
-    <button id="calculateBtn">Calculate</button>
-    
-    <!-- Results will be displayed here -->
-    <div id="results" class="results hidden"></div>
   </div>
 
   <script>
