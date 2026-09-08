@@ -1,345 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Production Units Calculator & Chatbot</title>
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    /* Global Styles */
-    * {
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-    }
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #74ABE2, #5563DE);
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    h1, h2 {
-      text-align: center;
-      color: #fff;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    /* Main container to hold both sections side by side */
-    .main {
-      display: flex;
-      flex-wrap: wrap;          /* Allows wrapping on smaller screens */
-      gap: 20px;
-      justify-content: center;  /* Centers the content horizontally */
-      max-width: 1200px;        /* Optional max width if you want to limit overall width */
-      margin: 0 auto;           /* Center the .main container in the body */
-    }
-
-    /* Calculator & Chatbot containers */
-    .container,
-    .chatbot-container {
-      background: #fff;
-      width: 100%;
-      max-width: 600px;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      padding: 30px;
-      box-sizing: border-box;
-    }
-
-    /* Form Groups */
-    .form-group {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #333;
-    }
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-      outline: none;
-    }
-    input[type="number"]:focus,
-    select:focus {
-      border-color: #5563DE;
-      box-shadow: 0 0 5px rgba(85, 99, 222, 0.3);
-    }
-
-    /* Button */
-    button {
-      width: 100%;
-      padding: 15px;
-      background: #5563DE;
-      border: none;
-      color: #fff;
-      font-size: 18px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #4454c4;
-    }
-
-    /* Results Box */
-    .results {
-      margin-top: 20px;
-      padding: 20px;
-      background: #f2f2f2;
-      border-radius: 6px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 0.5s forwards;
-    }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Hidden class */
-    .hidden {
-      display: none;
-    }
-
-    /* Chatbase Wrapper & Overlay */
-    .chatbase-wrapper {
-      position: relative;
-      width: 100%;
-      min-height: 700px; /* Matches iframe min-height */
-    }
-    .chatbase-wrapper iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      min-height: 700px;
-    }
-    .chatbase-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px; /* Increased to hide more text; adjust as needed */
-      background-color: #fff;
-      z-index: 9999;
-      pointer-events: none; /* Allows clicks to pass through */
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      .container,
-      .chatbot-container {
-        padding: 20px;
-      }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101211">
+  <meta name="description" content="Akash Biswas — data science, machine learning and research. Explore employee retention analysis, retail sales forecasting and published stablecoin research.">
+  <title>Akash Biswas — Data Science & Research</title>
+  <link rel="canonical" href="https://deeplearning186.github.io/">
+  <meta property="og:title" content="Akash Biswas — Data Science & Research">
+  <meta property="og:description" content="Finding the signal in the complex. Selected work in people analytics, sales forecasting and blockchain research.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://deeplearning186.github.io/">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="main">
-    <!-- Production Units Calculator -->
-    <div class="container">
-      <h1>Production Units Calculator</h1>
-      <!-- Order Type -->
-      <div class="form-group">
-        <label for="orderType">Order Type</label>
-        <select id="orderType">
-          <option value="formulation">Fill to Formulation</option>
-          <option value="order">Fill to Order</option>
-          <option value="quantity">Fill to Quantity</option>
-        </select>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="header">
+    <a class="brand" href="#home" aria-label="Akash Biswas home"><span class="brand-mark">ab<span>·</span></span><span class="brand-name">AKASH BISWAS</span></a>
+    <nav aria-label="Main navigation"><a href="#work">Work</a><a href="#research">Research</a><a href="#about">About</a></nav>
+    <a class="nav-contact" href="mailto:deeplearning186@gmail.com">Let’s talk <span aria-hidden="true">↗</span></a>
+  </header>
+  <main id="main">
+    <section class="hero wrap" id="home" aria-labelledby="hero-heading">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> DATA SCIENCE · MACHINE LEARNING · RESEARCH</p>
+        <h1 id="hero-heading">Finding the<br><span>signal</span> in<br>the complex.</h1>
+        <p class="hero-description">I’m Akash. I turn complex data into clear insights, predictive models, and better business decisions.</p>
+        <div class="hero-actions"><a class="button primary" href="#work">Explore my work <span aria-hidden="true">↘</span></a><a class="text-link" href="https://github.com/Deeplearning186" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
+        <p class="location"><span aria-hidden="true">⌖</span> London, Ontario, Canada</p>
       </div>
-
-      <!-- For Fill to Formulation -->
-      <div id="formulationInputs">
-        <div class="form-group">
-          <label for="oilAvailable">Total Oil Available (grams)</label>
-          <input type="number" id="oilAvailable" step="any" min="0" placeholder="e.g., 100" />
-        </div>
-        <div class="form-group">
-          <label for="targetFormulation">Target Formulation (grams per unit)</label>
-          <input type="number" id="targetFormulation" step="any" min="0" placeholder="e.g., 1 or 1.2" />
-        </div>
+      <div class="hero-graphic" aria-hidden="true">
+        <div class="graphic-top"><span>FIG. 01 / LATENT SPACE</span><span class="signal-label">● SIGNAL FOUND</span></div>
+        <canvas id="signal-field"></canvas>
+        <div class="axis-y">PATTERNS / POSSIBILITIES</div>
+        <div class="graphic-bottom"><span>FROM OBSERVATION TO UNDERSTANDING</span><span>↗</span></div>
       </div>
-
-      <!-- For Fill to Order -->
-      <div id="orderInputs" class="hidden">
-        <div class="form-group">
-          <label for="orderQuantity">Order Quantity (units)</label>
-          <input type="number" id="orderQuantity" step="1" min="0" placeholder="e.g., 100" />
-        </div>
+      <div class="hero-foot"><span>CURIOUS BY NATURE. ANALYTICAL BY DESIGN.</span><a href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
+    </section>
+    <div class="expertise-band"><div class="wrap expertise"><span>Python</span><i>✳</i><span>SQL</span><i>✳</i><span>Machine Learning</span><i>✳</i><span>Data Visualization</span><i>✳</i><span>Business Analysis</span></div></div>
+    <section class="section wrap" id="work" aria-labelledby="work-heading">
+      <div class="section-head"><div><p class="eyebrow muted">01 / SELECTED WORK</p><h2 id="work-heading">Questions, explored.<br><span class="subtle">Insights, uncovered.</span></h2></div><a class="text-link" href="https://github.com/Deeplearning186/Personal-Projects" target="_blank" rel="noopener noreferrer">All projects on GitHub <span aria-hidden="true">↗</span></a></div>
+      <div class="project-grid">
+        <article class="project-card retention">
+          <div class="project-visual retention-visual">
+            <div class="visual-top"><span>PEOPLE ANALYTICS</span><span>01</span></div>
+            <div class="retention-diagram"><div class="person-grid" id="person-grid" aria-hidden="true"></div><div class="visual-number"><strong>1,470<span>employees</span></strong><p>Understanding the patterns<br>behind employee attrition.</p></div></div>
+            <div class="visual-bottom"><span>EXPLORE → MODEL → EVALUATE</span><span aria-hidden="true">↗</span></div>
+          </div>
+          <div class="project-copy"><div class="tags"><span>Classification</span><span>People analytics</span></div><h3>What makes employees stay?</h3><p>Exploring the factors associated with employee attrition, then comparing logistic regression, random forest, and neural network models.</p><div class="project-stack">Python / Pandas / Scikit-learn / Seaborn</div><a class="project-link" href="https://github.com/Deeplearning186/Personal-Projects/blob/main/Employee%20Retention%20Analysis/Employee%20Retention.ipynb" target="_blank" rel="noopener noreferrer"><span>Explore employee retention</span><span aria-hidden="true">↗</span></a></div>
+        </article>
+        <article class="project-card sales">
+          <div class="project-visual sales-visual">
+            <div class="visual-top"><span>SALES DEPARTMENT</span><span>02</span></div>
+            <div class="sales-number"><strong>1M+</strong><span>daily sales records</span></div>
+            <div class="forecast-art" aria-hidden="true"><svg viewBox="0 0 600 145" preserveAspectRatio="none"><defs><linearGradient id="chart-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#a6b9f2" stop-opacity=".35"/><stop offset="1" stop-color="#a6b9f2" stop-opacity="0"/></linearGradient></defs><path d="M0 125 L22 100 44 109 66 72 88 92 110 110 132 80 154 42 176 68 198 88 220 55 242 29 264 58 286 82 308 49 330 18 352 44 374 67 396 37 420 15 420 145 0 145Z" fill="url(#chart-fill)"/><path d="M0 125 L22 100 44 109 66 72 88 92 110 110 132 80 154 42 176 68 198 88 220 55 242 29 264 58 286 82 308 49 330 18 352 44 374 67 396 37 420 15" fill="none" stroke="#bbcaff" stroke-width="2.5"/><path d="M420 15 L444 43 468 65 492 35 516 10 540 42 564 57 600 14" fill="none" stroke="#d5f78d" stroke-width="2.5" stroke-dasharray="5 5"/><path d="M420 0 V145" stroke="#737c8c" stroke-dasharray="3 6"/></svg></div>
+            <div class="visual-bottom"><span>TIME SERIES / FORECASTING STUDY</span><span class="illustration-note">ILLUSTRATIVE PATTERN</span></div>
+          </div>
+          <div class="project-copy"><div class="tags"><span>Time series</span><span>Retail analytics</span></div><h3>Making sense of sales over time.</h3><p>Combining daily sales with store metadata to explore seasonality, promotions, and trading patterns, with a 60-day Prophet forecast for a selected store.</p><div class="project-stack">Python / Pandas / Prophet / Matplotlib</div><a class="project-link" href="https://github.com/Deeplearning186/Personal-Projects/blob/main/Sales%20Department/Sales.ipynb" target="_blank" rel="noopener noreferrer"><span>Explore sales forecasting</span><span aria-hidden="true">↗</span></a></div>
+        </article>
       </div>
-
-      <!-- For Fill to Quantity -->
-      <div id="quantityInputs" class="hidden">
-        <div class="form-group">
-          <label for="fillQuantity">Fill Quantity (units)</label>
-          <input type="number" id="fillQuantity" step="1" min="0" placeholder="e.g., 100" />
-        </div>
-      </div>
-
-      <!-- Units per Box -->
-      <div class="form-group">
-        <label for="unitsPerBox">Units per Box</label>
-        <input type="number" id="unitsPerBox" step="1" min="1" placeholder="e.g., 200" />
-      </div>
-
-      <!-- Leak Test Option -->
-      <div class="form-group">
-        <label for="leakTest">Leak Test?</label>
-        <select id="leakTest">
-          <option value="yes">Yes</option>
-          <option value="no" selected>No</option>
-        </select>
-      </div>
-
-      <button id="calculateBtn">Calculate</button>
-      
-      <!-- Results will be displayed here -->
-      <div id="results" class="results hidden"></div>
-    </div>
-
-    <!-- Chatbot Section -->
-    <div class="chatbot-container">
-      <h2>Chat with Us</h2>
-      <div class="chatbase-wrapper">
-        <iframe
-          src="https://www.chatbase.co/chatbot-iframe/jmSKrUVVfzTOON-zilLH1"
-          frameborder="0">
-        </iframe>
-        <!-- Overlay to mask the bottom portion -->
-        <div class="chatbase-overlay"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Update visible inputs based on order type selection.
-    const orderTypeEl = document.getElementById('orderType');
-    const formulationInputs = document.getElementById('formulationInputs');
-    const orderInputs = document.getElementById('orderInputs');
-    const quantityInputs = document.getElementById('quantityInputs');
-    const resultsEl = document.getElementById('results');
-
-    function updateInputVisibility() {
-      const type = orderTypeEl.value;
-      formulationInputs.classList.add('hidden');
-      orderInputs.classList.add('hidden');
-      quantityInputs.classList.add('hidden');
-
-      if (type === 'formulation') {
-        formulationInputs.classList.remove('hidden');
-      } else if (type === 'order') {
-        orderInputs.classList.remove('hidden');
-      } else if (type === 'quantity') {
-        quantityInputs.classList.remove('hidden');
-      }
-    }
-    orderTypeEl.addEventListener('change', updateInputVisibility);
-    updateInputVisibility();
-
-    document.getElementById('calculateBtn').addEventListener('click', function () {
-      // Clear previous results
-      resultsEl.innerHTML = '';
-      resultsEl.classList.add('hidden');
-
-      let productionUnits = 0;
-      const type = orderTypeEl.value;
-      const unitsPerBox = Number(document.getElementById('unitsPerBox').value);
-      if (!unitsPerBox || unitsPerBox <= 0) {
-        alert("Please enter a valid number for units per box.");
-        return;
-      }
-      
-      // Calculate total production units based on the selected order type.
-      if (type === 'formulation') {
-        const oilAvailable = Number(document.getElementById('oilAvailable').value);
-        const targetFormulation = Number(document.getElementById('targetFormulation').value);
-        if (oilAvailable <= 0 || targetFormulation <= 0) {
-          alert("Please enter valid positive numbers for oil available and target formulation.");
-          return;
-        }
-        productionUnits = Math.floor(oilAvailable / targetFormulation);
-      } else if (type === 'order') {
-        productionUnits = Number(document.getElementById('orderQuantity').value);
-        if (!productionUnits || productionUnits <= 0) {
-          alert("Please enter a valid order quantity.");
-          return;
-        }
-      } else if (type === 'quantity') {
-        productionUnits = Number(document.getElementById('fillQuantity').value);
-        if (!productionUnits || productionUnits <= 0) {
-          alert("Please enter a valid fill quantity.");
-          return;
-        }
-      }
-      
-      // Reserve 3 units as retains (not used for leak test or boxing)
-      const retains = 3;
-      if (productionUnits <= retains) {
-        alert("Total production units must be greater than the 3 retains.");
-        return;
-      }
-      // Effective production for calculations.
-      const effectiveProduction = productionUnits - retains;
-      
-      const leakTestOption = document.getElementById('leakTest').value;
-      let output = `<h2>Results</h2>`;
-      output += `<p><strong>Total Production Units:</strong> ${productionUnits}</p>`;
-      output += `<p><strong>Retained Units:</strong> ${retains}</p>`;
-      
-      if (leakTestOption === 'yes') {
-        // Calculate required leak test units (10% of total production)
-        const requiredLeakTest = Math.ceil(0.10 * productionUnits);
-        let maxBoxes = Math.floor(effectiveProduction / unitsPerBox);
-        let boxes = maxBoxes;
-        // Adjust full boxes until the remaining units (leak test units) are at least requiredLeakTest.
-        while (boxes > 0 && (effectiveProduction - boxes * unitsPerBox) < requiredLeakTest) {
-          boxes--;
-        }
-        const boxedUnits = boxes * unitsPerBox;
-        const leakTestUnits = effectiveProduction - boxedUnits;
-        const leakTestPercentage = Math.round((leakTestUnits / productionUnits) * 100);
-        
-        output += `<p><strong>Number of Full Boxes:</strong> ${boxes} (each with ${unitsPerBox} units)</p>`;
-        output += `<p><strong>Boxed Units:</strong> ${boxedUnits}</p>`;
-        output += `<p><strong>Leak Test Units:</strong> ${leakTestUnits}</p>`;
-        output += `<p><strong>Required Leak Test Units (10%):</strong> ${requiredLeakTest}</p>`;
-        output += `<p><strong>Leak Test Percentage:</strong> ${leakTestPercentage}%</p>`;
-        output += `<p><strong>Effective Production:</strong> ${effectiveProduction}</p>`;
-        
-        // Divide leak test units into 3 groups: Up, Down, and Side.
-        const base = Math.floor(leakTestUnits / 3);
-        const remainderGroup = leakTestUnits % 3;
-        let up = base + (remainderGroup > 0 ? 1 : 0);
-        let down = base + (remainderGroup > 1 ? 1 : 0);
-        let side = leakTestUnits - up - down;
-        
-        output += `<p><strong>Leak Test Breakdown:</strong></p>`;
-        output += `<ul>`;
-        output += `<li>Up: ${up} unit${up === 1 ? '' : 's'}</li>`;
-        output += `<li>Down: ${down} unit${down === 1 ? '' : 's'}</li>`;
-        output += `<li>Side: ${side} unit${side === 1 ? '' : 's'}</li>`;
-        output += `</ul>`;
-      } else {
-        // Packaging without leak test (using effective production).
-        const numberOfBoxes = Math.ceil(effectiveProduction / unitsPerBox);
-        output += `<p><strong>Number of Boxes:</strong> ${numberOfBoxes}</p>`;
-        output += `<p><strong>Units Used for Boxing:</strong> ${effectiveProduction}</p>`;
-      }
-      
-      resultsEl.innerHTML = output;
-      resultsEl.classList.remove('hidden');
-    });
-  </script>
+    </section>
+    <section class="research-section" id="research" aria-labelledby="research-heading"><div class="wrap research-layout">
+      <div class="research-copy"><p class="eyebrow muted">02 / PUBLISHED RESEARCH</p><p class="publication-label"><span class="status-dot"></span> IJSREM · JANUARY 2023</p><h2 id="research-heading">Behind the peg.<br><span class="subtle">Inside the network.</span></h2><h3>Stable Coin Distribution and Ownership Analysis</h3><p>A closer look at how stablecoins are held and used across networks and issuers. The paper examines supply concentration, on-chain activity, transaction value, and shared ownership.</p><div class="research-topics"><span>Supply distribution</span><span>Network activity</span><span>Ownership patterns</span></div><div class="research-actions"><a class="button primary" href="assets/stablecoin-research.pdf" target="_blank" rel="noopener noreferrer">Read the paper <span aria-hidden="true">↗</span></a><a class="text-link" href="https://ijsrem.com/download/stable-coin-distribution-and-ownership-analysis/" target="_blank" rel="noopener noreferrer">Journal page <span aria-hidden="true">↗</span></a></div><p class="doi">AKASH BISWAS · DOI: 10.55041/IJSREM17448</p></div>
+      <a class="paper-display" href="assets/stablecoin-research.pdf" target="_blank" rel="noopener noreferrer" aria-label="Read Stable Coin Distribution and Ownership Analysis, PDF"><div class="paper-index"><span>RESEARCH NOTE / 001</span><span>6 PAGES</span></div><img src="assets/research-page.webp" alt="First page of Akash Biswas’s Stable Coin Distribution and Ownership Analysis paper" width="1391" height="1800" loading="lazy"><span class="paper-caption">From the published paper <span aria-hidden="true">↗</span></span></a>
+    </div></section>
+    <section class="section wrap about-section" id="about" aria-labelledby="about-heading"><div class="about-intro"><p class="eyebrow muted">03 / THE PERSON BEHIND THE DATA</p><h2 id="about-heading">Technical depth.<br><span class="subtle">Business perspective.</span></h2><p>I’m Akash Biswas, a data science and machine learning practitioner with a foundation in business analysis. My work spans predictive modeling, exploratory analysis, and blockchain research.</p><p>I bring research experience from IEM Labs and a data science internship at Inmovidu Tech, alongside postgraduate studies in AI, machine learning, and business analysis at Fanshawe College.</p><a class="text-link" href="https://www.linkedin.com/in/deeplearning186/" target="_blank" rel="noopener noreferrer">More about me on LinkedIn <span aria-hidden="true">↗</span></a></div><div class="about-details"><div class="detail-row"><span class="detail-number">01</span><div><h3>Data & modeling</h3><p>Python, SQL, R, Pandas, Scikit-learn, machine learning and deep learning.</p></div></div><div class="detail-row"><span class="detail-number">02</span><div><h3>Analysis & communication</h3><p>Exploratory analysis, time series forecasting, data visualization, and research synthesis.</p></div></div><div class="detail-row"><span class="detail-number">03</span><div><h3>Business understanding</h3><p>ECBA certified. Business analysis, Agile and Waterfall workflows, stakeholder-focused reporting.</p></div></div><div class="credential"><span class="credential-mark" aria-hidden="true">✳</span><div><span>ENTRY CERTIFICATE IN BUSINESS ANALYSIS</span><a href="https://badges.iiba.org/2b2b085b-10ba-4f88-9cf1-8bcdcc45f2f1?record_view=true" target="_blank" rel="noopener noreferrer">IIBA · View credential ↗</a></div></div></div></section>
+    <section class="contact-section" id="contact" aria-labelledby="contact-heading"><div class="wrap"><p class="eyebrow">HAVE AN INTERESTING QUESTION?</p><div class="contact-top"><h2 id="contact-heading">Let’s find the<br><span>next insight.</span></h2><a class="contact-arrow" href="mailto:deeplearning186@gmail.com" aria-label="Email Akash Biswas"><span aria-hidden="true">↗</span></a></div><a class="email-link" href="mailto:deeplearning186@gmail.com">deeplearning186@gmail.com</a><div class="footer"><span>© <span id="year">2026</span> Akash Biswas</span><div><a href="https://github.com/Deeplearning186" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/deeplearning186/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="#home">Back to top ↑</a></div></div></div></section>
+  </main>
 </body>
 </html>
